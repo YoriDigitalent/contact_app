@@ -49,10 +49,18 @@ class _AddContactPageState extends State<AddContactPage> {
                 SizedBox(
                   height: 20,
                 ),
+                Center(
+                  child: Text(
+                    "Tambahkan Data Karyawan",
+                    style: purpleTextFont.copyWith(fontSize: 16),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                SizedBox(
+                  height: 50,
+                ),
                 TextField(
                     controller: nameController,
-                    keyboardType:
-                        TextInputType.numberWithOptions(decimal: false),
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15),
@@ -84,10 +92,10 @@ class _AddContactPageState extends State<AddContactPage> {
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10)),
                       child: Text(
-                        "Pilih Tanggal dan Waktu",
+                        "Add Data",
                         style: whiteTextFont.copyWith(fontSize: 16),
                       ),
-                      color: Colors.orange,
+                      color: mainColor,
                       onPressed: () {
                         if (!(nameController.text.trim() != "" &&
                             jobController.text.trim() != "")) {
@@ -102,6 +110,9 @@ class _AddContactPageState extends State<AddContactPage> {
                             MaterialPageRoute(
                                 builder: (context) => BerandaPage()),
                           );
+
+                          AddDataServices.addDataContact(
+                              nameController.text, jobController.text);
                         }
                       }),
                 ),

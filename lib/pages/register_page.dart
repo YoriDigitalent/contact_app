@@ -150,7 +150,7 @@ class _RegisterPageState extends State<RegisterPage> {
         });
         sharedPreferences.setString("token", jsonResponse['token']);
         Navigator.of(context).push(
-            MaterialPageRoute(builder: (BuildContext context) => SplashPage()));
+            MaterialPageRoute(builder: (BuildContext context) => LoginPage()));
       }
     } else {
       setState(() {

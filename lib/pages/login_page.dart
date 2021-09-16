@@ -1,13 +1,13 @@
 part of 'pages.dart';
 
-class SplashPage extends StatefulWidget {
-  const SplashPage({Key key}) : super(key: key);
+class LoginPage extends StatefulWidget {
+  const LoginPage({Key key}) : super(key: key);
 
   @override
-  _SplashPageState createState() => _SplashPageState();
+  _LoginPageState createState() => _LoginPageState();
 }
 
-class _SplashPageState extends State<SplashPage> {
+class _LoginPageState extends State<LoginPage> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
@@ -42,10 +42,10 @@ class _SplashPageState extends State<SplashPage> {
                       height: 30,
                     ),
                     Text(
-                      "Aplikasi ini untuk admin yang ingin mengelola data karyawan",
-                      style: purpleTextFont.copyWith(
-                          fontSize: 14, fontWeight: FontWeight.bold),
-                    ),
+                        "Aplikasi ini untuk admin yang ingin mengelola data karyawan",
+                        style: purpleTextFont.copyWith(
+                            fontSize: 14, fontWeight: FontWeight.bold),
+                        textAlign: TextAlign.center),
                     SizedBox(
                       height: 50,
                     ),

@@ -15,23 +15,23 @@ class _BerandaPageState extends State<BerandaPage> {
     sharedPreferences = await SharedPreferences.getInstance();
     if (sharedPreferences.getString("token") == null) {
       Navigator.of(context).push(
-          MaterialPageRoute(builder: (BuildContext context) => SplashPage()));
+          MaterialPageRoute(builder: (BuildContext context) => LoginPage()));
     }
   }
 
-  String apiUrl = "https://reqres.in/api/users?page=5";
+  String apiUrl = "https://reqres.in/api/users?page=2";
 
-  Future<List<dynamic>> _getAllData() async {
-    var result = await http.get(apiUrl);
-
-    return json.decode(result.body)['data'];
+  Future<List<Map<String, dynamic>>> getAllData() async {
+    var response = await http.get(apiUrl);
+    if (response.statusCode != 200) return null;
+    return List<Map<String, dynamic>>.from(json.decode(response.body)['data']);
   }
 
+  Future<List<Map<String, dynamic>>> _future;
   @override
   void initState() {
     super.initState();
-    loginStatus();
-    _getAllData();
+    _future = getAllData();
   }
 
   @override
@@ -45,37 +45,45 @@ class _BerandaPageState extends State<BerandaPage> {
         body: ListView(children: <Widget>[
           Container(
             height: 600,
-            child: FutureBuilder<List<dynamic>>(
-              future: _getAllData(),
-              builder: (BuildContext context, AsyncSnapshot snapshot) {
-                if (snapshot.hasData) {
-                  return ListView.builder(
-                      padding: EdgeInsets.all(10),
-                      itemCount: snapshot.data.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return ListTile(
-                          leading: CircleAvatar(
-                            radius: 30,
-                            backgroundImage:
-                                NetworkImage(snapshot.data[index]['avatar']),
-                          ),
-                          title: Text(snapshot.data[index]['first_name'] +
-                              " " +
-                              snapshot.data[index]['last_name']),
-                          subtitle: Text(snapshot.data[index]['email']),
-                          onTap: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (BuildContext context) => DetailPage(
-                                      dataContact: snapshot.data[index],
-                                    )));
-                          },
-                        );
-                      });
-                } else {
-                  return Center(child: CircularProgressIndicator());
-                }
-              },
-            ),
+            child: RefreshIndicator(
+                onRefresh: () async {
+                  _future = getAllData();
+                  setState(() {});
+                  return _future;
+                },
+                child: FutureBuilder<List<Map<String, dynamic>>>(
+                  future: getAllData(),
+                  builder: (BuildContext context, AsyncSnapshot snapshot) {
+                    if (snapshot.hasData) {
+                      return ListView.builder(
+                          padding: EdgeInsets.all(10),
+                          itemCount: snapshot.data.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return ListTile(
+                              leading: CircleAvatar(
+                                radius: 30,
+                                backgroundImage: NetworkImage(
+                                    snapshot.data[index]['avatar']),
+                              ),
+                              title: Text(snapshot.data[index]['first_name'] +
+                                  " " +
+                                  snapshot.data[index]['last_name']),
+                              subtitle: Text(snapshot.data[index]['email']),
+                              onTap: () {
+                                // GetDataContact.getData(
+                                //     snapshot.data[index]['id']);
+
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (BuildContext context) =>
+                                        DetailPage()));
+                              },
+                            );
+                          });
+                    } else {
+                      return Center(child: CircularProgressIndicator());
+                    }
+                  },
+                )),
           ),
 
           // Add Button

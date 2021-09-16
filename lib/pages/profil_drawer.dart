@@ -37,12 +37,12 @@ class _DrawerWidgetState extends State<DrawerWidget> {
               icon: Icons.logout,
               text: 'Sign Out',
               onTap: () {
+                sharedPreferences.containsKey("token");
                 sharedPreferences.clear();
-                // ignore: deprecated_member_use
-                sharedPreferences.commit();
+
                 Navigator.of(context).pushAndRemoveUntil(
                     MaterialPageRoute(
-                        builder: (BuildContext context) => SplashPage()),
+                        builder: (BuildContext context) => LoginPage()),
                     (Route<dynamic> route) => false);
               }),
           Divider(height: 25, thickness: 1),
